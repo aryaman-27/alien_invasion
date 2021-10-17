@@ -26,13 +26,14 @@ class AlienInvasion:
         pygame.display.set_caption('Alien Invasion')
         
         self.ship = Ship(self)
+        self.bullets = pygame.sprite.Group()
                 
     def run_game(self):
         """main loop for the game"""
         while True:
             self._check_events()
             self.ship.update()
-            # self.bullets.update()
+            self.bullets.update()
             self._update_screen()
             
     def _check_events(self):
@@ -56,8 +57,8 @@ class AlienInvasion:
         elif event.key == pygame.K_q:
             pygame.quit()
             sys.exit()
-        # elif event.key == pygame.K_SPACE:
-        #     self._fire_bullet()
+        elif event.key == pygame.K_SPACE:
+            self._fire_bullet()
                    
     def _check_keyup_events(self, event):
         if event.key == pygame.K_RIGHT:
@@ -72,8 +73,8 @@ class AlienInvasion:
     def _update_screen(self):
         self.screen.fill(self.settings.bg_color)
         self.ship.blitme()
-        # for bullet in self.bullets.sprite():
-        #      bullet.draw_bullet()
+        for bullet in self.bullets.sprites():
+            bullet.draw_bullet()
         pygame.display.flip()
 
 if __name__ == '__main__':
