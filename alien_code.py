@@ -9,7 +9,7 @@ Created on Sat Oct 23 18:50:46 2021
 import pygame
 from pygame.sprite import Sprite
 
-class Alien(Sprite)
+class Alien(Sprite):
     """A class to represent a single alien in the fleet"""
 
     def __init__(self, ai_game):
@@ -17,7 +17,7 @@ class Alien(Sprite)
         self.screen = ai_game.screen
 
         # Load the alien image and set its rect attribute
-        self.image = pygame.image.load(images/alien.bmp)
+        self.image = pygame.image.load('images/alien_edited.bmp')
         self.rect = self.image.get_rect()
 
         self.rect.x = self.rect.width
