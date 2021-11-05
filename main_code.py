@@ -133,7 +133,7 @@ class AlienInvasion:
         self.aliens.update()
 
         if pygame.sprite.spritecollideany(self.ship, self.aliens):
-            self._ship_hit
+            self._ship_hit()
 
     def _update_screen(self):
         self.screen.fill(self.settings.bg_color)
