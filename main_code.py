@@ -194,7 +194,7 @@ class AlienInvasion:
         # Check for any bullets that have hit aliens
         # If so, get rid of the bullet & alien
         collisions = pygame.sprite.groupcollide(
-                self.bullets, self.aliens, False, True)
+                self.bullets, self.aliens, True, True)
 
         if not self.aliens:
             self.bullets.empty()
