@@ -39,21 +39,25 @@ class AlienInvasion:
         self._create_fleet()
 
         # Make the play button
-        self.play_button = Button(self, "play")
+        self.play_button = Button(self, 'play')
+        self.pause_button = Button(self, 'pause')
 
     def run_game(self):
         """main loop for the game"""
         while True:
             self._check_events()
-            if self.stats.game_active:
-                self.ship.update()
-                self._update_bullets()
-                self._update_aliens()
+            if not self.stats.game_paused:
+                if self.stats.game_active:
+                    self.ship.update()
+                    self._update_bullets()
+                    self._update_aliens()
+            else:
+                self._pause_game()
 
             self._update_screen()
 
     def _check_events(self):
-        """Respons to keypresses and mouse events"""
+        """Respond to keypresses and mouse events"""
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -68,6 +72,8 @@ class AlienInvasion:
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 mouse_pos = pygame.mouse.get_pos()
                 self._check_play_button(mouse_pos)
+                if self.stats.game_paused == True:
+                    self._resume_game(mouse_pos)
 
     def _check_play_button(self, mouse_pos):
         button_clicked = self.play_button.rect.collidepoint(mouse_pos)
@@ -97,7 +103,9 @@ class AlienInvasion:
             sys.exit()
         elif event.key == pygame.K_SPACE:
             self._fire_bullet()
-                   
+        elif event.key == pygame.K_ESCAPE:
+            self.stats.game_paused = True
+
     def _check_keyup_events(self, event):
         if event.key == pygame.K_RIGHT:
             self.ship.moving_right = False
@@ -126,6 +134,16 @@ class AlienInvasion:
             self.stats.game_active = False
             pygame.mouse.set_visible(True)
 
+    def _pause_game(self):
+        self.pause_button.draw_button()
+        pygame.mouse.set_visible(True)
+
+    def _resume_game(self, mouse_pos):
+        pause_button_clicked = self.pause_button.rect.collidepoint(mouse_pos)
+        if pause_button_clicked and self.stats.game_paused == True:
+            self.stats.game_paused = False
+            pygame.mouse.set_visible(False)
+
     def _create_fleet(self):
         alien = Alien(self)
         alien_width = alien.rect.width
@@ -150,7 +168,7 @@ class AlienInvasion:
         alien_width, alien_height = alien.rect.size
         alien.x = alien_width + 2 * alien_width * alien_number
         alien.rect.x = alien.x
-        alien.rect.y = alien.rect.height + 2 * alien.rect.height * row_number
+        alien.rect.y = alien.rect.height + 10 + 2 * alien.rect.height * row_number
         self.aliens.add(alien)
         
     def _check_fleet_edges(self):
