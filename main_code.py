@@ -103,8 +103,10 @@ class AlienInvasion:
             sys.exit()
         elif event.key == pygame.K_SPACE:
             self._fire_bullet()
-        elif event.key == pygame.K_ESCAPE:
+        elif event.key == pygame.K_ESCAPE and self.stats.game_paused == False:
             self.stats.game_paused = True
+        elif event.key == pygame.K_ESCAPE and self.stats.game_paused == True:
+            self.stats.game_paused = False
 
     def _check_keyup_events(self, event):
         if event.key == pygame.K_RIGHT:
@@ -135,7 +137,6 @@ class AlienInvasion:
             pygame.mouse.set_visible(True)
 
     def _pause_game(self):
-        self.pause_button.draw_button()
         pygame.mouse.set_visible(True)
 
     def _resume_game(self, mouse_pos):
@@ -202,6 +203,9 @@ class AlienInvasion:
         # Draw the play button if the game is inactive
         if not self.stats.game_active:
             self.play_button.draw_button()
+
+        if self.stats.game_paused:
+            self.pause_button.draw_button()
 
         pygame.display.flip()
 
