@@ -24,7 +24,7 @@ class AlienInvasion:
         pygame.init()
         self.settings = Settings()
         
-        self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+        self.screen = pygame.display.set_mode((1200, 800))
         self.settings.screen_width = self.screen.get_rect().width
         self.settings.screen_height = self.screen.get_rect().height
         
@@ -91,7 +91,7 @@ class AlienInvasion:
             self._create_fleet()
             self.ship.center_ship()
 
-            pygame.mouse.set_visible(False)
+            #pygame.mouse.set_visible(False)
                 
     def _check_keydown_events(self, event):
         if event.key == pygame.K_RIGHT:
@@ -120,21 +120,26 @@ class AlienInvasion:
             self.bullets.add(new_bullet)
 
     def _ship_hit(self):
-        if self.stats.ships_left > 0:
-            self.stats.ships_left -= 1
-            self.sb.prep_ships()
+       self.ship.ship_exploded = True
+       self.ship.blitme()
+       if self.stats.ships_left > 0:
+           self.stats.ships_left -= 1
 
-            self.aliens.empty()
-            self.bullets.empty()
+           self.sb.prep_ships()
 
-            self._create_fleet()
-            self.ship.center_ship()
+           self.aliens.empty()
+           self.bullets.empty()
 
-            sleep(0.5)
+           self._create_fleet()
+           self.ship.center_ship()
+           pygame.display.flip()
 
-        else:
-            self.stats.game_active = False
-            pygame.mouse.set_visible(True)
+           sleep(0.5)
+
+       else:
+           self.stats.game_active = False
+           pygame.mouse.set_visible(True)
+       self.ship.ship_exploded = False
 
     def _pause_game(self):
         pygame.mouse.set_visible(True)
