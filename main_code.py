@@ -47,7 +47,7 @@ class AlienInvasion:
         while True:
             self._check_events()
             if not self.stats.game_paused:
-                if self.stats.game_active:
+                if self.stats.game_active or self.ship.explosionInProgress():
                     self.ship.update()
                     self._update_bullets()
                     self._update_aliens()
@@ -55,6 +55,8 @@ class AlienInvasion:
                 self._pause_game()
 
             self._update_screen()
+            if self.ship.explosionInProgress():
+                sleep(0.1)
 
     def _check_events(self):
         """Respond to keypresses and mouse events"""
@@ -120,9 +122,8 @@ class AlienInvasion:
             self.bullets.add(new_bullet)
 
     def _ship_hit(self):
-       self.ship.ship_exploded = True
-       self.ship.blitme()
-       if self.stats.ships_left > 0:
+       self.ship.startExplosion()
+       if self.stats.ships_left > 0 and self.ship.explosionComplete():
            self.stats.ships_left -= 1
 
            self.sb.prep_ships()
